@@ -1,0 +1,134 @@
+monkeys = 0
+happiness = 3
+jailTime = 0
+commands = ["get monkey", "rob zoo", "steal wild monkey", "rest"]
+import random
+
+print("This is the Monkey Game")
+print("Your goal is to have 100 Monkies")
+
+def ask():
+    global monkeys
+    global happiness
+    answer = input ("What do you want to do?")
+
+    if answer.lower() =="get monkey":
+        monkeys += 1
+        happiness -= 1
+        showStats()
+        check()
+        ask()
+        
+
+    elif answer.lower() =="rest":
+        happiness += 1
+        showStats()
+        check()
+        ask()
+        
+    elif answer.lower() == "rob zoo":
+        chance = random.randint (0, 3)
+        if chance == 0:
+            print("Oof, you got caught by the police :skull:")
+            showStats()
+            
+            jail()
+        else:
+            print("Successful!")
+            happiness += 1
+            monkeys += random.randint (3, 10)
+            showStats()
+            
+            ask()
+    elif answer.lower() == "steal wild monkey":
+        chance = random.randint (0,3)
+        if chance == 0:
+            print("No way! Successful!")
+            happiness += 3
+            monkeys += random.randint (10, 25)
+            showStats()
+            ask()
+        else:
+            print("You got caught :skull:")
+            happiness -= 1
+            showStats()
+            jail()
+    elif answer.lower() == "commit suicide":
+        happiness = -100
+        showStats()
+    elif answer.lower() == "help":
+        print("Commands: ", sep = ", " ,*commands )
+        ask()
+    elif answer.lower() == "hibernate":
+        happiness = 17
+        lost = random.randint(0,5)
+        monkeys -= lost
+        showStats()
+        print("you lost: ", lost, "monkeys...")
+        ask()
+        
+    else:
+        print("Huh?")
+        print("Type help for help")
+        print("Commands are Case-Sensitive")
+        ask()
+
+def jail():
+    global jailTime
+    global happiness
+    if jailTime >= 3:
+        print("You are now out of jail!")
+        ask()
+    else:
+        answer = input("You are in jail, what do you want to do?")
+        if answer.lower() == "run away":
+            chance = random.randint (0,3)
+            if chance == 0:
+                print("You ran away from Jail!")
+                happiness += 1
+                showStats()
+                ask()
+            else:
+                print("Good try, you failed")
+                happiness -= 2
+                jailTime += 1
+                showStats()
+                check()
+                jail()
+
+        elif answer.lower() == "nothing":
+            happiness -= 2
+            jailTime += 1
+            showStats()
+        else:
+            print("Huh?")
+            print("Type Jail Help")
+            jail()
+        jail()
+        
+        
+    
+def check():
+    if monkeys >= 100:
+        print("Wowee! You won!")
+        exit()
+    elif monkeys <= 0:
+        print("You have negative monkeys, the IRS is after you now!")
+        exit()
+    elif happiness == -1 or happiness == -2:
+        print("Oof, you died of depression :skull:")
+        exit()
+    elif happiness == -100:
+        print("Okay, you diiiiiie")
+        exit()    
+    
+
+def showStats():
+    print("Monkeys: " + str(monkeys))
+    print("Happiness: " + str(happiness))
+    check()
+    
+    
+ask()
+
+
